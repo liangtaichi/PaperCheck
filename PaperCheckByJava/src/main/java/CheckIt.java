@@ -8,12 +8,12 @@ import java.util.List;
 public class CheckIt {
     public static void check(String org, String add, FileWriter output){
         /**
-         * 对比，通过hanlp分词找出相似度,提取50个关键词
+         * 对比，通过hanlp分词找出相似度,提取500个关键词
          */
         HashMap< String, Double> hMap = new HashMap< String, Double>();
         TFIDFAnalyzer tfidfAnalyzer1 = new TFIDFAnalyzer();
         TFIDFAnalyzer tfidfAnalyzer2 = new TFIDFAnalyzer();
-        int topN = 18;
+        int topN = 500;
         Double[] count = new Double[topN];
         Double all = 0.0;
         int i = 0;
