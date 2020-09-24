@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class main {
-    public static void Check() {
+    public static void main(String[] arg) {
         /**
          * 由于文档博客写的是用空格分开的绝对路径字符串输入，所以直接用inputfile数组来填装。
          * 只需要输入一次，所以直接用Scanner

@@ -13,8 +13,8 @@ public class CheckIt {
         HashMap< String, Double> hMap = new HashMap< String, Double>();
         TFIDFAnalyzer tfidfAnalyzer1 = new TFIDFAnalyzer();
         TFIDFAnalyzer tfidfAnalyzer2 = new TFIDFAnalyzer();
-        int topN = 50;
-        Double[] count = new Double[50];
+        int topN = 18;
+        Double[] count = new Double[topN];
         Double all = 0.0;
         int i = 0;
         Double l1 = 0.0 , l2 = 0.0;
@@ -34,7 +34,7 @@ public class CheckIt {
             l1 = l1 + list1.get(j).getTfidfvalue() * list1.get(j).getTfidfvalue() ;
             l2 = l2 + list2.get(j).getTfidfvalue() * list2.get(j).getTfidfvalue() ;
         }
-        for (int k = 0; k < 50; k++) {
+        for (int k = 0; k < topN; k++) {
             all += count[k];
         }
         double target = all/(Math.sqrt(l1)*Math.sqrt(l2));
@@ -42,7 +42,7 @@ public class CheckIt {
         /**
          * 输出到指定文件
          */
-
+        System.out.println(String.valueOf(target));
         output.write(String.valueOf(target));
     }
 }
