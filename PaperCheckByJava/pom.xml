@@ -29,6 +29,12 @@
             <version>4.13</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.jprofiler/jprofiler-agent -->
+        <dependency>
+            <groupId>com.jprofiler</groupId>
+            <artifactId>jprofiler-agent</artifactId>
+            <version>10.1-PRE4</version>
+        </dependency>
 
     </dependencies>
 
