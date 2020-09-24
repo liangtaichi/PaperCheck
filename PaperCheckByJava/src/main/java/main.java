@@ -1,7 +1,11 @@
 
-import Utils.Reader;
+import cn.hutool.core.io.file.FileReader;
+import cn.hutool.core.io.file.FileWriter;
+import com.qianxinyao.analysis.jieba.keyword.Keyword;
+import com.qianxinyao.analysis.jieba.keyword.TFIDFAnalyzer;
 
-import java.io.File;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,19 +19,50 @@ public class main {
         String[] inputfile = reader.nextLine().split(" ");
 
         /**
-         *根据得到的inputfile数组的不同元素将文件装到不同的list中。
-         * 由于博客文档是按照源文件-修改文件-答案文件的路径来写示例，所以数组三个元素顺序对应关系也按这个来
-         * 开始是一个一个存入list，后来觉得太麻烦，于是创建reader类
+         *根据得到的inputfile数组的不同元素将文件装到不同的FileReader中。
+         * 然后从FileReader写入String
          */
-        List org = Reader.readTxtFile(inputfile[0]);
-        List add = Reader.readTxtFile(inputfile[1]);
-        List ans = Reader.readTxtFile(inputfile[2]);
+        FileReader fileReader1 = new FileReader(inputfile[0]);
+        FileReader fileReader2 = new FileReader(inputfile[1]);
+        String org = fileReader1.toString();
+        String add = fileReader2.toString();
 
         /**
-         *对比，由于比较复杂，所以另开一个compare类来表示
+         * 对比，通过hanlp分词找出相似度,提取50个关键词
          */
+        HashMap< String, Double> hMap = new HashMap< String, Double>();
+        TFIDFAnalyzer tfidfAnalyzer1 = new TFIDFAnalyzer();
+        TFIDFAnalyzer tfidfAnalyzer2 = new TFIDFAnalyzer();
+        int topN = 50;
+        Double[] count = new Double[50];
+        Double all = 0.0;
+        int i = 0;
+        Double l1 = 0.0 , l2 = 0.0;
+        List<Keyword> list1 = tfidfAnalyzer1.analyze(org,topN);
+        List<Keyword> list2 = tfidfAnalyzer2.analyze(add,topN);
 
+        for(Keyword keyword:list1){
+            hMap.put(keyword.getName(), keyword.getTfidfvalue());
+        }
+        for (Keyword keyword:list2){
+            if (hMap.containsKey(keyword.getName())){
+                count[i] = keyword.getTfidfvalue() * hMap.get(keyword);
+                i++;
+            }
+        }
+        for (int j = 0; j < list1.size(); j++) {
+            l1 = l1 + list1.get(j).getTfidfvalue() * list1.get(j).getTfidfvalue() ;
+            l2 = l2 + list2.get(j).getTfidfvalue() * list2.get(j).getTfidfvalue() ;
+        }
+        for (int k = 0; k < 50; k++) {
+            all += count[k];
+        }
+        double target = all/(Math.sqrt(l1)*Math.sqrt(l2));
 
-
+        /**
+         * 输出到指定文件
+         */
+        FileWriter fileWriter = new FileWriter(inputfile[2]);
+        fileWriter.write(String.valueOf(target));
     }
 }
